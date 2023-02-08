@@ -10,6 +10,7 @@ public class PrimeFinderThread extends Thread {
 
 	private List<Integer> primes;
 
+
 	public PrimeFinderThread(int a, int b) {
 		super();
 		this.primes = new LinkedList<>();
@@ -17,6 +18,9 @@ public class PrimeFinderThread extends Thread {
 		this.b = b;
 	}
 
+	/**
+	 * Método que hace que cada hilo corra y que agrega los primos encontrados a una lista propia
+	 */
 	@Override
 	public void run() {
 		int i =0;
@@ -38,6 +42,11 @@ public class PrimeFinderThread extends Thread {
 
 	}
 
+	/**
+	 * Método que determina si un número dado es primo
+	 * @param n Número el cual se verificará si es primo o no
+	 * @return Booleano que indica si n es primo o no
+	 */
 	boolean isPrime(int n) {
 		boolean ans;
 		if (n > 2) {
@@ -51,10 +60,16 @@ public class PrimeFinderThread extends Thread {
 		return ans;
 	}
 
+	/**
+	 * Método que retorna la lista de primos encontrados
+	 */
 	public List<Integer> getPrimes() {
 		return primes;
 	}
 	
+	/**
+	 * Método que duerme al thread
+	 */
 	public synchronized void sleep() {
 		try {
 			this.wait();
@@ -63,14 +78,24 @@ public class PrimeFinderThread extends Thread {
 		}
 	}
 	
+	/**
+	 * Método que cambia el estado de la variable sleep 
+	 */
 	public void changeSleep() {
 		sleep=true;
 	}
 	
+	/**
+	 * Método que devuelve la cantidad de numeros primos encontrados
+	 * @return Tamaño del arreglo de primos encontrado
+	 */
 	public int getPrimesFound() {
 		return primes.size();
 	}
 	
+	/**
+	 * Método que reactiva un thread
+	 */
 	public synchronized void wakeUp() {
 		sleep=false;
 		this.notifyAll();

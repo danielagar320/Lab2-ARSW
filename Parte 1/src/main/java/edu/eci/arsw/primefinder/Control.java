@@ -21,6 +21,9 @@ public class Control extends Thread {
 
 	private PrimeFinderThread pft[];
 
+	/**
+	 * Constructor que le indica a los threads los rangos en loq eu debe trabajar e inicializa los threads 
+	 */
 	private Control() {
 		super();
 
@@ -34,10 +37,16 @@ public class Control extends Thread {
 		pft[i] = new PrimeFinderThread(i * NDATA, MAXVALUE + 1);
 	}
 
+	/**
+	 * Método que inciialzia el contructor
+	 */
 	public static Control newControl() {
 		return new Control();
 	}
 
+	/**
+	 * Método que verifica si un thread ya terminó su tarea
+	 */
 	private void isOver() {
 		boolean t = true;
 		for (int i = 0; i < NTHREADS; i++) {
@@ -50,6 +59,9 @@ public class Control extends Thread {
 
 	}
 
+	/**
+	 * Método que hace que cada hilo encuentre los primos de su rango y luego imprima la cantidad de estos encontrada
+	 */
 	@Override
 	public void run() {
 		for (int i = 0; i < NTHREADS; i++) {
