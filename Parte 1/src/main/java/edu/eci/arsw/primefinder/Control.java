@@ -6,100 +6,100 @@
 package edu.eci.arsw.primefinder;
 
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  */
 public class Control extends Thread {
-    
-    private final static int NTHREADS = 3;
-    private final static int MAXVALUE = 300000;
-    private final static int TMILISECONDS = 3000;
 
-    private final int NDATA = MAXVALUE / NTHREADS;
+	private final static int NTHREADS = 3;
+	private final static int MAXVALUE = 30000000;
+	private final static int TMILISECONDS = 5000;
+	private boolean terminaron = false;
 
-    private PrimeFinderThread pft[];
-    private Control control;
+	private final int NDATA = MAXVALUE / NTHREADS;
 
-    private boolean over = true;
-    
-    private Control() {
-        super();
-        this.pft = new  PrimeFinderThread[NTHREADS];
-        control = this;
-        int i;
-        for(i = 0;i < NTHREADS - 1; i++) {
-            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, this);
-            pft[i] = elem;
-        }
-        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, this);
-    }
-    
-    public static Control newControl() {
-        return new Control();
-    }
+	private PrimeFinderThread pft[];
 
-    @Override
-    public void run() {
-        for(int i = 0;i < NTHREADS;i++ ) {
-            System.out.println("Inicio");
-            pft[i].start();
-        }
-        while(true){
-            try{
-                sleep(TMILISECONDS);
+	private Control() {
+		super();
 
-                //Detener todos los hilos
-                for(int i = 0; i < NTHREADS; i++){
-                    pft[i].sleep();
-                }
-                for(int i = 0; i < NTHREADS; i++){
-                    System.out.println("El hilo "+ i + " encontró "+ pft[i].getPrimesFound()+ " numeros primos. Presione enter para continuar.");
-                    Scanner enter = new Scanner(System.in);
-                    enter.nextLine();
-                }
+		this.pft = new PrimeFinderThread[NTHREADS];
 
-                //Desperterlos
-                for(int i = 0; i <NTHREADS; i++){
-                    pft[i].wakeUp();
-                }
-                synchronized(control){
-                    control.notifyAll();
-                }
-            }catch(InterruptedException e){
-                throw new RuntimeException(e);
-            }
-            if(over){
-                break;
-            }
-        }
+		int i;
+		for (i = 0; i < NTHREADS - 1; i++) {
+			PrimeFinderThread elem = new PrimeFinderThread(i * NDATA, (i + 1) * NDATA);
+			pft[i] = elem;
+		}
+		pft[i] = new PrimeFinderThread(i * NDATA, MAXVALUE + 1);
+	}
 
-    }
+	public static Control newControl() {
+		return new Control();
+	}
 
+	private void yaT() {
+		boolean t = true;
+		for (int i = 0; i < NTHREADS; i++) {
+			if (pft[i].isAlive()) {
+				t = false;
+				break;
+			}
+		}
+		terminaron = t;
 
-    /**
-     * Metodo que da la cantidad de primos encontrados cuando el hilo esta en espera.
-     * @return Cantidad de hilos encontrados.
-     */
+	}
 
+	@Override
+	public void run() {
+		
+		for (int i = 0; i < NTHREADS; i++) {
+			pft[i].start();
+		}
+		Scanner sc = new Scanner(System.in);
 
+		long maxT = System.currentTimeMillis() + TMILISECONDS;
 
-    public int primesFound(){
-        int total = 0;
-        int i = 0;
-        while(i<NTHREADS){
-            if(pft[i].waiting()){
-                total = total+pft[i].getPrimesFound();
-                i++;
-            }
-        }
-        return total;
-    }
+		while (!terminaron) {
 
-    public void isOver(){
-        over = true;
-    }
-    
+			if (System.currentTimeMillis() >= maxT) {
+				
+				for (int i = 0; i < NTHREADS; i++) {
+
+					System.out.println("el thread " + i + " ha hallado " + pft[i].hallados() + " primos");
+
+					pft[i].dormir();
+
+					
+					
+
+				}
+				boolean enter = true;
+				while (enter) {
+					System.out.println("oprima enter para continuar");
+					if (sc.nextLine().equals("")) {
+
+						for (int i = 0; i < pft.length; i++) {
+							
+							//pft[i].notify();
+							pft[i].awake();
+						}
+
+						maxT = System.currentTimeMillis() + TMILISECONDS;
+					}
+					enter = false;
+					break;
+				}
+
+			}
+			yaT();
+		}
+
+		for (int i = 0; i < pft.length; i++) {
+			System.out.println("el thread " + i + " ha encontrado " + pft[i].hallados() + " primos");
+		}
+		System.out.println("fin");
+		System.exit(0);
+	}
+
 }

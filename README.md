@@ -1,6 +1,9 @@
 ### Escuela Colombiana de Ingeniería
 ## Arquitecturas de Software - ARSW
 
+
+### Integrantes: Edwar Lozano y Daniela García
+
 #### Laboratorio - Programación concurrente, condiciones de carrera, esquemas de sincronización, colecciones sincronizadas y concurrentes.
 
 Ejercicio inividual o en parejas.
