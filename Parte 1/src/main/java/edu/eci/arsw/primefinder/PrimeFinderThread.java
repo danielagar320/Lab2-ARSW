@@ -37,6 +37,10 @@ public class PrimeFinderThread extends Thread{
             if (isPrime(i)){
                 primes.add(i);
                 System.out.println(i);
+
+                if(i == b){
+                    control.isOver();
+                }
             }
         }
 	}

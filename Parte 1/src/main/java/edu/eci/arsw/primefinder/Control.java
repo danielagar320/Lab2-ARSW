@@ -22,6 +22,8 @@ public class Control extends Thread {
 
     private PrimeFinderThread pft[];
     private Control control;
+
+    private boolean over = true;
     
     private Control() {
         super();
@@ -42,23 +44,24 @@ public class Control extends Thread {
     @Override
     public void run() {
         for(int i = 0;i < NTHREADS;i++ ) {
+            System.out.println("Inicio");
             pft[i].start();
         }
         while(true){
             try{
-                System.out.println("Ëntro");
                 sleep(TMILISECONDS);
 
                 //Detener todos los hilos
                 for(int i = 0; i < NTHREADS; i++){
                     pft[i].sleep();
                 }
+                for(int i = 0; i < NTHREADS; i++){
+                    System.out.println("El hilo "+ i + " encontró "+ pft[i].getPrimesFound()+ " numeros primos. Presione enter para continuar.");
+                    Scanner enter = new Scanner(System.in);
+                    enter.nextLine();
+                }
 
-                System.out.println("Se han encontrado: "+primesFound()+ " numeros primos. Presione enter para continuar.");
-                Scanner enter = new Scanner(System.in);
-                enter.nextLine();
-
-                //
+                //Desperterlos
                 for(int i = 0; i <NTHREADS; i++){
                     pft[i].wakeUp();
                 }
@@ -66,9 +69,13 @@ public class Control extends Thread {
                     control.notifyAll();
                 }
             }catch(InterruptedException e){
-                Logger.getLogger(Control.class.getName()).log(Level.SEVERE,null, e);
+                throw new RuntimeException(e);
+            }
+            if(over){
+                break;
             }
         }
+
     }
 
 
@@ -89,6 +96,10 @@ public class Control extends Thread {
             }
         }
         return total;
+    }
+
+    public void isOver(){
+        over = true;
     }
     
 }
