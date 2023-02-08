@@ -28,6 +28,9 @@ Control de hilos con [wait/notify.](http://howtodoinjava.com/core-java/multi-thr
     la ejecución de los mismos. Utilice los mecanismos de sincronización
     provistos por el lenguaje (wait y notify, notifyAll).
 
+
+ 
+
 Tenga en cuenta:
 
 -   La construcción synchronized se utiliza para obtener acceso exclusivo a un objeto.

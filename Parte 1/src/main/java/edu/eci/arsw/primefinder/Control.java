@@ -15,7 +15,7 @@ public class Control extends Thread {
 	private final static int NTHREADS = 3;
 	private final static int MAXVALUE = 30000000;
 	private final static int TMILISECONDS = 5000;
-	private boolean terminaron = false;
+	private boolean over = false;
 
 	private final int NDATA = MAXVALUE / NTHREADS;
 
@@ -38,7 +38,7 @@ public class Control extends Thread {
 		return new Control();
 	}
 
-	private void yaT() {
+	private void isOver() {
 		boolean t = true;
 		for (int i = 0; i < NTHREADS; i++) {
 			if (pft[i].isAlive()) {
@@ -46,7 +46,7 @@ public class Control extends Thread {
 				break;
 			}
 		}
-		terminaron = t;
+		over = t;
 
 	}
 
@@ -60,29 +60,23 @@ public class Control extends Thread {
 
 		long maxT = System.currentTimeMillis() + TMILISECONDS;
 
-		while (!terminaron) {
+		while (!over) {
 
 			if (System.currentTimeMillis() >= maxT) {
 				
 				for (int i = 0; i < NTHREADS; i++) {
-
-					System.out.println("el thread " + i + " ha hallado " + pft[i].hallados() + " primos");
-
-					pft[i].dormir();
-
-					
-					
-
+					System.out.println("El hilo " + i + " hallo " + pft[i].getPrimesFound() + " numeros primos");
+					pft[i].changeSleep();
 				}
 				boolean enter = true;
 				while (enter) {
-					System.out.println("oprima enter para continuar");
+					System.out.println("Presione enter para continuar");
 					if (sc.nextLine().equals("")) {
 
 						for (int i = 0; i < pft.length; i++) {
 							
 							//pft[i].notify();
-							pft[i].awake();
+							pft[i].wakeUp();
 						}
 
 						maxT = System.currentTimeMillis() + TMILISECONDS;
@@ -92,13 +86,13 @@ public class Control extends Thread {
 				}
 
 			}
-			yaT();
+			isOver();
 		}
 
 		for (int i = 0; i < pft.length; i++) {
-			System.out.println("el thread " + i + " ha encontrado " + pft[i].hallados() + " primos");
+			System.out.println("El hilo " + i + " encontro " + pft[i].getPrimesFound() + " numeros primos");
 		}
-		System.out.println("fin");
+		System.out.println("Proceso finalizado");
 		System.exit(0);
 	}
 

@@ -19,21 +19,16 @@ public class PrimeFinderThread extends Thread {
 
 	@Override
 	public void run() {
-		
 		int i =0;
 		for (i = a; i < b; i++) {
 			if(sleep) {
-				
 				try {
-					
-					this.dormire();
-					
+					this.sleep();
 				}
 				catch(Exception e) {System.out.println("error al dormir "+e);}
 			}
 			else {
 				if (isPrime(i)) {
-					//System.out.println(i);
 					primes.add(i);
 				}
 			}
@@ -60,7 +55,7 @@ public class PrimeFinderThread extends Thread {
 		return primes;
 	}
 	
-	public synchronized void dormire() {
+	public synchronized void sleep() {
 		try {
 			this.wait();
 		} catch (InterruptedException e) {
@@ -68,15 +63,15 @@ public class PrimeFinderThread extends Thread {
 		}
 	}
 	
-	public void dormir() {
+	public void changeSleep() {
 		sleep=true;
 	}
 	
-	public int hallados() {
+	public int getPrimesFound() {
 		return primes.size();
 	}
 	
-	public synchronized void awake() {
+	public synchronized void wakeUp() {
 		sleep=false;
 		this.notifyAll();
 	}
