@@ -52,14 +52,11 @@ public class Control extends Thread {
 
 	@Override
 	public void run() {
-		
 		for (int i = 0; i < NTHREADS; i++) {
 			pft[i].start();
 		}
 		Scanner sc = new Scanner(System.in);
-
 		long maxT = System.currentTimeMillis() + TMILISECONDS;
-
 		while (!over) {
 
 			if (System.currentTimeMillis() >= maxT) {

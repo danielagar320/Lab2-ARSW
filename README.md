@@ -28,6 +28,19 @@ Control de hilos con [wait/notify.](http://howtodoinjava.com/core-java/multi-thr
     la ejecución de los mismos. Utilice los mecanismos de sincronización
     provistos por el lenguaje (wait y notify, notifyAll).
 
+- Dentro del metodo run de la clase PrimeFinderThread llamamos el metodo sleep.
+
+![](img/run.png)
+
+
+- En el metodo sleep usamos el mecanismo de sincronización wait que le dice al subproceso que llama que abandone el bloqueo y se duerma hasta que otro subproceso ingrese al mismo monitor y llame notify().
+
+![](img/run.png)
+
+- Dentro del metodo run de la clase Control se llama el metodo que trae el numero de primos encontrados y los imprime.
+
+![](img/runControl.png)
+
 
  
 
