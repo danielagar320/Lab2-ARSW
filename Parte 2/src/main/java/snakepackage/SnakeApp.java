@@ -8,6 +8,8 @@ import javax.swing.JFrame;
 import enums.GridSize;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -53,12 +55,14 @@ public class SnakeApp {
         
         frame.add(board,BorderLayout.CENTER);
         
-        JPanel actionsBPabel=new JPanel();
+        JPanel actionsBPabel = new JPanel();
         actionsBPabel.setLayout(new FlowLayout());
         actionsBPabel.add(new JButton("Action "));
         frame.add(actionsBPabel,BorderLayout.SOUTH);
 
     }
+
+    
 
     public static void main(String[] args) {
         app = new SnakeApp();
